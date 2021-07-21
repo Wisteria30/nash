@@ -9,7 +9,7 @@ from sklearn.neighbors import DistanceMetric
 
 import util
 import model as Model
-
+import wandb
 
 def eval_retrieval(vector, label, batch_size=1000, top_n=100) :
     distance = DistanceMetric.get_metric("hamming").pairwise(vector, vector)
@@ -44,8 +44,7 @@ def encode(model, feature, batch_size=512, use_cuda=True) :
     return vector
 
 
-def main(config) :
-
+def main(config, wandb) :
     np.random.seed(config.random_seed)
     torch.manual_seed(config.random_seed)
 
@@ -57,6 +56,8 @@ def main(config) :
     dataloader = DataLoader(TensorDataset(
          torch.from_numpy(feature.toarray()).float()
     ), batch_size=config.batch_size, shuffle=True, drop_last=True)
+
+    import pdb; pdb.set_trace()
 
     model = Model.NASH(config, input_size)
     if config.use_cuda :
@@ -79,6 +80,7 @@ def main(config) :
             optimizer.zero_grad()
             scheduler.step()
         print("train epoch {} : {}".format(e+1, avg_loss/len(dataloader)))
+        wandb.log({"epoch": e+1, "loss": avg_loss/len(dataloader)})
         vector = encode(model, feature, use_cuda=config.use_cuda)
         precision = eval_retrieval(vector, label, top_n=config.top_n)
         if precision > max_precision :
@@ -87,10 +89,10 @@ def main(config) :
         print("")
         print("")
     torch.save(best_weight, "best.w")
-
+    wandb.save("best.w")
 
 if __name__=="__main__" :
-
+    wandb.init(project="nash")
     parser = argparse.ArgumentParser()
     parser.add_argument("--use_cuda", default=True, type=bool, help="use cuda or not")
     parser.add_argument("--feature_type" , default="tfidf", type=str, help="tfidf | onehot")
@@ -106,4 +108,5 @@ if __name__=="__main__" :
     parser.add_argument("--top_n" , default=100, type=int, help="number of top n retrieved number")
 
     config = parser.parse_args()
-    main(config)
+    wandb.config.update(config)
+    main(config, wandb)

@@ -19,6 +19,9 @@ down:
 	-docker stop $(NAME)
 	-docker rm $(NAME)
 
+ps:
+	docker ps
+
 stop:
 	docker stop $(NAME)
 
