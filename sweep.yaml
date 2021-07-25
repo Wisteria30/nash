@@ -7,7 +7,7 @@ parameters:
   hamming_dist:
     values: [3, 5, 7, 10]
   data_hamming_dist:
-    values: 3
+    value: 4
   epoch:
     values: [10, 15, 20]
   output_size:
