@@ -6,3 +6,4 @@ rm 20news-18828.tar.gz
 cd ..
 pip install -r requirements.txt
 python -c "import nltk; nltk.download('punkt')"
+wandb login

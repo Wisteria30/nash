@@ -121,7 +121,7 @@ def main(config, wandb) :
 
 
 if __name__=="__main__" :
-    wandb.init(project="nash-db-tune", entity="mu-lab")
+    wandb.init(project="nash-db", entity="mu-lab")
     parser = argparse.ArgumentParser()
     parser.add_argument("--use_cuda", default=True, type=bool, help="use cuda or not")
     parser.add_argument("--feature_type" , default="onehot", type=str, help="tfidf | onehot")
