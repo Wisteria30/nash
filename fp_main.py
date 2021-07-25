@@ -108,9 +108,9 @@ def main(config, wandb) :
         hash_code = encode(model, feature, use_cuda=config.use_cuda)
         precision, recall, pred_count, raw_count = eval_retrieval(hash_code, raw_db, category, config.hamming_dist, config.output_size)
         print("Number of Predict / Raw_Data: {} / {}".format(pred_count, raw_count))
-        wandb.log({"NumofPredict": pred_count, "NumofRawData": raw_count})
+        wandb.log({"num_of_predict": pred_count, "num_of_rawd_ata": raw_count})
         print("Precision: {}, Recall: {}".format(precision, recall))
-        wandb.log({"Precision": precision, "Recall": recall})
+        wandb.log({"precision": precision, "recall": recall})
         if precision > max_precision :
             max_precision = precision
             best_weight = model.state_dict()
@@ -121,7 +121,7 @@ def main(config, wandb) :
 
 
 if __name__=="__main__" :
-    wandb.init(project="nash-db", entity="mu-lab")
+    wandb.init(project="nash-db-tune", entity="mu-lab")
     parser = argparse.ArgumentParser()
     parser.add_argument("--use_cuda", default=True, type=bool, help="use cuda or not")
     parser.add_argument("--feature_type" , default="onehot", type=str, help="tfidf | onehot")
