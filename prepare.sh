@@ -5,6 +5,5 @@ tar -xvf 20news-18828.tar.gz
 rm 20news-18828.tar.gz
 cd ..
 ./download_fp.sh
-pip install -r requirements.txt
 python -c "import nltk; nltk.download('punkt')"
 wandb login
